@@ -14,14 +14,13 @@ declare -A figDefaults=( [font]="Standard" [fontPath]="./fonts" )
 
 # ---------------------------------------------------------------------
 # Functions
-declare -A rules
 
 # This function takes in the oldLayout and newLayout data from the FIGfont
 # header file and returns the layout information
 getSmushingRules() {
 	local oldLayout="$1" newLayout="$2"
 
-	local val index len code
+	local rules val index len code
 	local codes0=( 16384 "vLayout" "$SMUSHING" )
 	local codes1=( 8192 "vLayout" "$FITTING" )
 	local codes2=( 4096 "vRule5" true )
@@ -82,4 +81,6 @@ getSmushingRules() {
 			rules[vLayout]="$CONTROLLED_SMUSHING"
 		fi
 	fi
+
+	getSmushingRules_return="$rules"
 }

@@ -10,7 +10,7 @@ declare -r CONTROLLED_SMUSHING=3
 # ---------------------------------------------------------------------
 # Variables that will hold information about the fonts
 declare -A figFonts
-declare -A figDefaults=( [font]="Standard" [fontPath]="./fonts" )
+declare -A figDefaults=([font]="Standard" [fontPath]="./fonts")
 
 # ---------------------------------------------------------------------
 # Functions
@@ -21,22 +21,22 @@ getSmushingRules() {
 	local oldLayout="$1" newLayout="$2"
 
 	local rules val index len code
-	local codes0=( 16384 "vLayout" "$SMUSHING" )
-	local codes1=( 8192 "vLayout" "$FITTING" )
-	local codes2=( 4096 "vRule5" true )
-	local codes3=( 2048 "vRule4" true )
-	local codes4=( 1024 "vRule3" true )
-	local codes5=( 512 "vRule2" true )
-	local codes6=( 256 "vRule1" true )
-	local codes7=( 128 "hLayout" "$SMUSHING" )
-	local codes8=( 64 "hLayout" "$FITTING" )
-	local codes9=( 32 "hRule6" true )
-	local codes10=( 16 "hRule5" true )
-	local codes11=( 8 "hRule4" true )
-	local codes12=( 4 "hRule3" true )
-	local codes13=( 2 "hRule2" true )
-	local codes14=( 1 "hRule1" true )
-	local codes=( codes0 codes1 codes2 codes3 codes4 codes5 codes6 codes7 codes8 codes9 codes10 codes11 codes12 codes13 codes14 )
+	local codes0=(16384 "vLayout" "$SMUSHING")
+	local codes1=(8192 "vLayout" "$FITTING")
+	local codes2=(4096 "vRule5" true)
+	local codes3=(2048 "vRule4" true)
+	local codes4=(1024 "vRule3" true)
+	local codes5=(512 "vRule2" true)
+	local codes6=(256 "vRule1" true)
+	local codes7=(128 "hLayout" "$SMUSHING")
+	local codes8=(64 "hLayout" "$FITTING")
+	local codes9=(32 "hRule6" true)
+	local codes10=(16 "hRule5" true)
+	local codes11=(8 "hRule4" true)
+	local codes12=(4 "hRule3" true)
+	local codes13=(2 "hRule2" true)
+	local codes14=(1 "hRule1" true)
+	local codes=(codes0 codes1 codes2 codes3 codes4 codes5 codes6 codes7 codes8 codes9 codes10 codes11 codes12 codes13 codes14)
 
 	[ -z "$newLayout" ] && val="$oldLayout" || val="$newLayout"
 	index=0

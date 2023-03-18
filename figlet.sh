@@ -84,3 +84,12 @@ getSmushingRules() {
 
 	getSmushingRules_return="$rules"
 }
+
+# Rule 1: EQUAL CHARACTER SMUSHING (code value 1)
+#     Two sub-characters are smushed into a single sub-character if they are the
+#     same. This rule does not smush hardblanks (see rule 6 on hardblanks below)
+hRule1_Smush() {
+	local ch1="$1" ch2="$2" hardBlank="$3"
+
+	if [ "$ch1" == "$ch2" ]; then 
+}

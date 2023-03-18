@@ -91,5 +91,9 @@ getSmushingRules() {
 hRule1_Smush() {
 	local ch1="$1" ch2="$2" hardBlank="$3"
 
-	if [ "$ch1" == "$ch2" ]; then 
+	if [ "$ch1" == "$ch2" ] && [ "$ch1" != "$hardBlank" ]; then
+		hRule1_Smush_return="$ch1"
+	else
+		hRule1_Smush_return=false
+	fi
 }

@@ -85,6 +85,8 @@ getSmushingRules() {
 	getSmushingRules_return="$rules"
 }
 
+# The [vh]Rule[1-6]_Smush functions return the smushed character OR false if the two characters can't be smushed
+
 # Rule 1: EQUAL CHARACTER SMUSHING (code value 1)
 #     Two sub-characters are smushed into a single sub-character if they are the
 #     same. This rule does not smush hardblanks (see rule 6 on hardblanks below)

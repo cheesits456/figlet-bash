@@ -90,11 +90,10 @@ getSmushingRules() {
 #     same. This rule does not smush hardblanks (see rule 6 on hardblanks below)
 hRule1_Smush() {
 	local ch1="$1" ch2="$2" hardBlank="$3"
+	hRule1_Smush_return=false
 
 	if [ "$ch1" == "$ch2" ] && [ "$ch1" != "$hardBlank" ]; then
 		hRule1_Smush_return="$ch1"
-	else
-		hRule1_Smush_return=false
 	fi
 }
 
@@ -103,6 +102,7 @@ hRule1_Smush() {
 #     "{", "}", "(", ")", "<", or ">"
 hRule2_Smush() {
 	local ch1="$1" ch2="$2"
+	hRule2_Smush_return=false
 
 	local rule2Str="|/\\[]{}()<>"
 	if [ "$ch1" == "_" ]; then
@@ -113,7 +113,5 @@ hRule2_Smush() {
 		if [[ "$rule2Str" == *"$ch1"* ]]; then
 			hRule2_Smush_return="$ch1"
 		fi
-	else
-		hRule2_Smush_return=false
 	fi
 }

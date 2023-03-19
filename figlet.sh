@@ -262,3 +262,21 @@ vRule4_Smush() {
 		vRule4_Smush_return="="
 	fi
 }
+
+# Rule 5: VERTICAL LINE SUPERSMUSHING (code value 2048)
+#     This one rule is different from all others, in that it "supersmushes"
+#     vertical lines consisting of several vertical bars ("|"). This creates the
+#     illusion that FIGcharacters have slid vertically against each other.
+#     Supersmushing continues until any sub-characters other than "|" would have
+#     to be smushed. Supersmushing can produce impressive results, but it is
+#     seldom possible, since other sub-characters would usually have to be
+#     considered for smushing as soon as any such stacked vertical lines are
+#     encountered
+vRule5_Smush() {
+	local ch1="$1" ch2="$2"
+	vRule5_Smush_return=false
+
+	if [ "$ch1" == "|" ] && [ "$ch2" == "|" ]; then
+		vRule5_Smush_return="|"
+	fi
+}

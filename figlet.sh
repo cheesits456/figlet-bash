@@ -207,3 +207,21 @@ vRule1_Smush() {
 		vRule1_Smush_return="$ch1"
 	fi
 }
+
+# Rule 2: UNDERSCORE SMUSHING (code value 512)
+#     Same as horizontal smushing rule 2
+vRule2_Smush() {
+	local ch1="$1" ch2="$2"
+	vRule2_Smush_return=false
+
+	local rule2Str="|/\\[]{}()<>"
+	if [ "$ch1" == "_" ]; then
+		if [[ "$rule2Str" == *"$ch2"* ]]; then
+			vRule2_Smush_return="$ch2"
+		fi
+	elif [ "$ch2" == "_" ]; then
+		if [[ "$rule2Str" == *"$ch1"* ]]; then
+			vRule2_Smush_return="$ch1"
+		fi
+	fi
+}

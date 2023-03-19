@@ -196,3 +196,14 @@ hRule6_Smush() {
 		hRule6_Smush_return="$hardBlank"
 	fi
 }
+
+# Rule 1: EQUAL CHARACTER SMUSHING (code value 256)
+#     Same as horizontal smushing rule 1
+vRule1_Smush() {
+	local ch1="$1" ch2="$2"
+	vRule1_Smush_return=false
+
+	if [ "$ch1" == "$ch2" ]; then
+		vRule1_Smush_return="$ch1"
+	fi
+}

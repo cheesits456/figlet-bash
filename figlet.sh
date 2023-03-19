@@ -247,3 +247,18 @@ vRule3_Smush() {
 		fi
 	fi
 }
+
+# Rule 4: HORIZONTAL LINE SMUSHING (code value 2048)
+#     Smushes stacked pairs of "-" and "_", replacing them with a single "="
+#     sub-character. It does not matter which is found above the other. Note
+#     that vertical smushing rule 1 will smush IDENTICAL pairs of horizontal
+#     lines, while this rule smushes horizontal lines consisting of DIFFERENT
+#     sub-characters
+vRule4_Smush() {
+	local ch1="$1" ch2="$2"
+	vRule4_Smush_return=false
+
+	if [[ ("$ch1" == "-" && "$ch2" == "_") || ("$ch1" == "_" && "$ch2" == "-") ]]; then
+		vRule4_Smush_return="="
+	fi
+}

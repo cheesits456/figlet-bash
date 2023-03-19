@@ -280,3 +280,19 @@ vRule5_Smush() {
 		vRule5_Smush_return="|"
 	fi
 }
+
+# Universal smushing simply overrides the sub-character from the earlier
+# FIGcharacter with the sub-character from the later FIGcharacter. This produces
+# an "overlapping" effect with some FIGfonts, wherin the latter FIGcharacter may
+# appear to be "in front"
+uni_Smush() {
+	local ch1="$1" ch2="$2" hardBlank="$3"
+
+	if [ "$ch2" == " " ] || [ "$ch2" == "" ]; then
+		uni_Smush_return="$ch1"
+	elif [ "$ch2" == "$hardBlank" ] && [ "$ch1" != " " ]; then
+		uni_Smush_return="$ch1"
+	else
+		uni_Smush_return="$ch2"
+	fi
+}

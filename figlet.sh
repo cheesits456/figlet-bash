@@ -184,3 +184,15 @@ hRule5_Smush() {
 		fi
 	fi
 }
+
+# Rule 6: HARDBLANK SMUSHING (code value 32)
+#     Smushes two hardblanks together, replacing them with a single hardblank
+#     (see "Hardblanks" below)
+hRule6_Smush() {
+	local ch1="$1" ch2="$2" hardBlank="$3"
+	hRule6_Smush_return=false
+
+	if [ "$ch1" == "$hardBlank" ] && [ "$ch2" == "$hardBlank" ]; then
+		hRule6_Smush_return="$hardBlank"
+	fi
+}

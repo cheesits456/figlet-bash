@@ -115,3 +115,26 @@ hRule2_Smush() {
 		fi
 	fi
 }
+
+# Rule 3: HIERARCHY SMUSHING (code value 4)
+#     A hierarchy of six classes is used: "|", "/\", "[]", "{}", "()", and "<>".
+#     When two smushing sub-characters are from different classes, the one from
+#     the latter class will be used
+hRule3_Smush() {
+	local ch1="$1" ch2="$2"
+	local temp
+	hRule3_Smush_return=false
+
+	local rule3Classes="| /\\ [] {} () <>"
+	temp=${rule3Classes#*"$ch1"}
+	local r3_pos1=$((${#rule3Classes} - ${#temp} - ${#ch1}))
+	temp=${rule3Classes#*"$ch2"}
+	local r3_pos2=$((${#rule3Classes} - ${#temp} - ${#ch2}))
+	if [ "$r3_pos1" -gt -1 ] && [ "$r3_pos2" -gt -1 ]; then
+		temp=$((r3pos1 - r3pos2))
+		if [ "$r3_pos1" != "$r3_pos2" ] && [ "${temp/#-/}" != 1 ]; then
+			temp=$((r3_pos1 > r3_pos2 ? r3_pos1 : r3_pos2))
+			hRule3_Smush_return="${rule3Classes:temp:1}"
+		fi
+	fi
+}

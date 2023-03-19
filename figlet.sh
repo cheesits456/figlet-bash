@@ -140,3 +140,25 @@ hRule3_Smush() {
 		fi
 	fi
 }
+
+# Rule 4: OPPOSITE PAIR SMUSHING (code value 8)
+#     Smushes opposing brackets ("[]" or "]["), braces ("{}" or "}{"), and
+#     parentheses ("()" or ")(") together, replacing any such pair with a
+#     vertical bar ("|")
+hRule4_Smush() {
+	local ch1="$1" ch2="$2"
+	local temp
+	hRule4_Smush_return=false
+
+	local rule4Str="[] {} ()"
+	temp=${rule4Str#*"$ch1"}
+	local r4_pos1=$((${#rule4Str} - ${#temp} - ${#ch1}))
+	temp=${rule4Str#*"$ch2"}
+	local r4_pos2=$((${#rule4Str} - ${#temp} - ${#ch2}))
+	if [ "$r4_pos1" -gt -1 ] && [ "$r4_pos2" -gt -1 ]; then
+		temp=$((r4_pos1 - r4_pos2))
+		if [ ! "${temp/#-/}" -gt 1 ]; then
+			hRule4_Smush_return="|"
+		fi
+	fi
+}

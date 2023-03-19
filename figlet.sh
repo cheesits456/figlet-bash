@@ -162,3 +162,25 @@ hRule4_Smush() {
 		fi
 	fi
 }
+
+# Rule 5: BIG X SMUSHING (code value 16)
+#     Smushes "/\" into "|", "\/" into "Y", and "><" into "X". Note that "<>" is
+#     not smushed in any way by this rule. The name "BIG X" is historical;
+#     originally all three pairs were smushed into "X"
+hRule5_Smush() {
+	local ch1="$1" ch2="$2"
+	local temp
+	hRule5_Smush_return=false
+
+	local rule5Str="/\\ \\/ ><"
+	declare -A rule5Hash=([0]="|" [3]="Y" [6]="X")
+	temp=${rule5Str#*"$ch1"}
+	local r5_pos1=$((${#rule5Str} - ${#temp} - ${#ch1}))
+	temp=${rule5Str#*"$ch2"}
+	local r5_pos2=$((${#rule5Str} - ${#temp} - ${#ch2}))
+	if [ "$r5_pos1" -gt -1 ] && [ "$r5_pos2" -gt -1 ]; then
+		if [ $((r5_pos2 - r5_pos1)) == 1 ]; then
+			hRule5_Smush_return="${rule5Hash[$r5_pos1]}"
+		fi
+	fi
+}

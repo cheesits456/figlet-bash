@@ -296,3 +296,77 @@ uni_Smush() {
 		uni_Smush_return="$ch2"
 	fi
 }
+
+# ------------------------------------------------------------------------------
+# Main vertical smush routines (excluding rules)
+
+# txt1         - A line of text
+# txt2         - A line of text
+# fittingRules - FIGlet options
+# About: Takes in two lines of text and returns one of the following:
+# "valid" - These lines can be smushed together given the current smushing rules
+# "end" - The lines can be smushed, but we're at a stopping point
+# "invalid" - The two lines cannot be smushed together
+canVerticalSmush() {
+	local txt1="$1" txt2="$2" fittingRules="$3"
+	local temp1 temp2
+
+	if [ "${fittingRules[vLayout]}" == "$FULL_WIDTH" ]; then
+		canVerticalSmush_return="invalid"
+		return 0
+	fi
+	temp1="${#txt1}"
+	temp2="${#txt2}"
+	local ii len=$((temp1 < temp2 ? temp1 : temp2))
+	local ch1 ch2 endSmush=false validSmush
+	if [ "$len" == 0 ]; then
+		canVerticalSmush_return="invalid"
+		return 0
+	fi
+
+	for ((ii = 0; ii < len; ii++)); do
+		ch1="${txt1:ii:1}"
+		ch2="${txt2:ii:1}"
+		if [ "$ch1" != " " ] && [ "$ch2" != " " ]; then
+			if [ "${fittingRules[vLayout]}" == "$FITTING" ]; then
+				canVerticalSmush_return="invalid"
+				return 0
+			elif [ "${fittingRules[vLayout]}" == "$SMUSHING" ]; then
+				canVerticalSmush_return="end"
+				return 0
+			else
+				vRule5_Smush "$ch1" "$ch2"
+				if [ "$vRule5_Smush_return" != false ]; then
+					continue
+				fi
+				validSmush=false
+				if [ "${fittingRules[vRule1]}" != 0 ]; then
+					vRule1_Smush "$ch1" "$ch2"
+					validSmush="$vRule1_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule2]}" != 0 ]; then
+					vRule2_Smush "$ch1" "$ch2"
+					validSmush="$vRule2_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule3]}" != 0 ]; then
+					vRule3_Smush "$ch1" "$ch2"
+					validSmush="$vRule3_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule4]}" != 0 ]; then
+					vRule4_Smush "$ch1" "$ch2"
+					validSmush="$vRule4_Smush_return"
+				fi
+				endSmush=true
+				if [ "$validSmush" == false ]; then
+					canVerticalSmush_return="invalid"
+					return 0
+				fi
+			fi
+		fi
+	done
+	if [ "$endSmush" == true ]; then
+		canVerticalSmush_return="end"
+	else
+		canVerticalSmush_return="valid"
+	fi
+}

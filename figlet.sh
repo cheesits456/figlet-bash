@@ -434,3 +434,52 @@ getVerticalSmushDist() {
 
 	getVerticalSmushDist_return=$((maxDist < curDist ? maxDist : curDist))
 }
+
+# Use opts.fittingRules value as argument instead of just opts
+verticallySmushLines() {
+	local line1="$1" line2="$2" fittingRules="$3"
+
+	local ii len=$((${#line1[@]} < ${#line2[@]} ? ${#line1[@]} : ${#line2[@]}))
+	local ch1 ch2 result="" validSmush
+
+	for ((ii = 0; ii < len; ii++)); do
+		ch1="${line1:ii:1}"
+		ch2="${line2:ii:1}"
+		if [ "$ch1" != " " ] && [ "$ch2" != " " ]; then
+			if [ "${fittingRules[vLayout]}" == "$FITTING" ]; then
+				uni_Smush "$ch1" "$ch2"
+				result+="$uni_Smush_return"
+			elif [ "${fittingRules[vLayout]}" == "$SMUSHING" ]; then
+				uni_Smush "$ch1" "$ch2"
+				result+="$uni_Smush_return"
+			else
+				validSmush=false
+				if [ "${fittingRules[vRule5]}" != 0 ]; then
+					vRule5_Smush "$ch1" "$ch2"
+					validSmush="$vRule5_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule1]}" != 0 ]; then
+					vRule1_Smush "$ch1" "$ch2"
+					validSmush="$vRule1_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule2]}" != 0 ]; then
+					vRule2_Smush "$ch1" "$ch2"
+					validSmush="$vRule2_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule3]}" != 0 ]; then
+					vRule3_Smush "$ch1" "$ch2"
+					validSmush="$vRule3_Smush_return"
+				fi
+				if [ "$validSmush" == false ] && [ "${fittingRules[vRule4]}" != 0 ]; then
+					vRule4_Smush "$ch1" "$ch2"
+					validSmush="$vRule4_Smush_return"
+				fi
+				result+="$validSmush"
+			fi
+		else
+			uni_Smush "$ch1" "$ch2"
+			result+="$uni_Smush_return"
+		fi
+	done
+	verticallySmushLines_return="$result"
+}

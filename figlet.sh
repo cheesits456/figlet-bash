@@ -385,8 +385,10 @@ canVerticalSmush() {
 }
 
 # Use opts.fittingRules value as argument instead of just opts
+# Pass lines arrays as variable references
 getVerticalSmushDist() {
-	local lines1="$1" lines2="$2" fittingRules="$3"
+	local -n lines1="$1" lines2="$2"
+	local fittingRules="$3"
 	local temp1 temp2
 
 	local maxDist="${#lines1[@]}"
@@ -439,7 +441,7 @@ getVerticalSmushDist() {
 verticallySmushLines() {
 	local line1="$1" line2="$2" fittingRules="$3"
 
-	local ii len=$((${#line1[@]} < ${#line2[@]} ? ${#line1[@]} : ${#line2[@]}))
+	local ii len=$((${#line1} < ${#line2} ? ${#line1} : ${#line2}))
 	local ch1 ch2 result="" validSmush
 
 	for ((ii = 0; ii < len; ii++)); do

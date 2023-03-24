@@ -383,3 +383,54 @@ canVerticalSmush() {
 		canVerticalSmush_return="valid"
 	fi
 }
+
+# Use opts.fittingRules value as argument instead of just opts
+getVerticalSmushDist() {
+	local lines1="$1" lines2="$2" fittingRules="$3"
+	local temp1 temp2
+
+	local maxDist="${#lines1[@]}"
+	local len1="${#lines1[@]}"
+	local len2="${#lines2[@]}"
+	local subLines1 subLines2 slen
+	local curDist=1
+	local ii ret result
+	while [ ! "$curDist" -gt "$maxDist" ]; do
+
+		temp1=$((len1 - curDist > 0 ? len1 - curDist : 0))
+		temp2=$((len1 - temp1))
+		subLines1=("${lines1[@]:temp1:temp2}")
+		temp1=$((maxDist > curDist ? maxDist : curDist))
+		subLines2=("${lines2[@]:0:temp1}")
+
+		slen="${#subLines2[@]}"
+		result=""
+		for ((ii = 0; ii < slen; ii++)); do
+			canVerticalSmush "${subLines1[ii]}" "${subLines2[ii]}" "$fittingRules"
+			ret="$canVerticalSmush_return"
+			if [ "$ret" == "end" ]; then
+				result="$ret"
+			elif [ "$ret" == "invalid" ]; then
+				result="$ret"
+				break
+			else
+				if [ "$result" == "" ]; then
+					result="valid"
+				fi
+			fi
+		done
+
+		if [ "$result" == "invalid" ]; then
+			curDist=$((curDist - 1))
+			break
+		fi
+		if [ "$result" == "end" ]; then
+			break
+		fi
+		if [ "$result" == "valid" ]; then
+			curDist=$((curDist + 1))
+		fi
+	done
+
+	getVerticalSmushDist_return=$((maxDist < curDist ? maxDist : curDist))
+}

@@ -485,3 +485,39 @@ verticallySmushLines() {
 	done
 	verticallySmushLines_return="$result"
 }
+
+# Use opts.fittingRules value as argument instead of just opts
+# Pass lines arrays as variable references
+verticalSmush() {
+	local -n lines1="$1" lines2="$2"
+	local overlap="$3" fittingRules="$4"
+	local temp1 temp2
+
+	local len1="${#lines1[@]}"
+	local len2="${#lines2[@]}"
+	temp1=$((len1 - overlap > 0 ? len1 - overlap : 0))
+	local piece1=("${lines1[@]:0:temp1}")
+	temp2=$((len1 - temp1))
+	local piece2_1=("${lines2[@]:temp1:temp2}")
+	temp1=$((overlap < len2 ? overlap : len2))
+	local piece2_2=("${lines2[@]:0:temp1}")
+	local ii len line piece2=() piece3 result=()
+
+	len="${#piece2_1[@]}"
+	for ((ii = 0; ii < len; ii++)); do
+		if [ ! "$ii" -lt "$len2" ]; then
+			line="${piece2_1[ii]}"
+		else
+			verticallySmushLines "${piece2_1[ii]}" "${piece2_2[ii]}" "$fittingRules"
+			line="$verticallySmushLines_return"
+		fi
+		piece2+=("$line")
+	done
+
+	temp1=$((overlap < len2 ? overlap : len2))
+	temp2=$((len2 - temp1))
+	piece3=("${lines2[@]:temp1:temp2}")
+
+	result+=("${piece1[@]}" "${piece2[@]}" "${piece3[@]}")
+	verticalSmush_return=("${result[@]}")
+}

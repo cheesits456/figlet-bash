@@ -36,7 +36,10 @@ getSmushingRules() {
 	local codes12=(4 "hRule3" true)
 	local codes13=(2 "hRule2" true)
 	local codes14=(1 "hRule1" true)
-	local codes=(codes0 codes1 codes2 codes3 codes4 codes5 codes6 codes7 codes8 codes9 codes10 codes11 codes12 codes13 codes14)
+	local codes=(
+		codes0 codes1 codes2 codes3 codes4 codes5 codes6 codes7
+		codes8 codes9 codes10 codes11 codes12 codes13 codes14
+	)
 
 	[ -z "$newLayout" ] && val="$oldLayout" || val="$newLayout"
 	index=0
@@ -45,7 +48,9 @@ getSmushingRules() {
 		declare -n code=${codes[index]}
 		if [ ! "$val" -lt "${code[0]}" ]; then
 			val=$((val - code[0]))
-			[ -z "${rules[${code[1]}]}" ] && rules[${code[1]}]=${code[2]} || rules[${code[1]}]=${rules[${code[1]}]}
+			[ -z "${rules[${code[1]}]}" ] &&
+				rules[${code[1]}]=${code[2]} ||
+				rules[${code[1]}]=${rules[${code[1]}]}
 		elif [ "${code[1]}" != "vLayout" ] && [ "${code[1]}" != "hLayout" ]; then
 			rules[${code[1]}]=false
 		fi
@@ -58,26 +63,34 @@ getSmushingRules() {
 		elif [ "$oldLayout" == -1 ]; then
 			rules[hLayout]="$FULL_WIDTH"
 		else
-			if [ "${rules[hRule1]}" != 0 ] || [ "${rules[hRule2]}" != 0 ] || [ "${rules[hRule3]}" != 0 ] || [ "${rules[hRule4]}" != 0 ] || [ "${rules[hRule5]}" != 0 ] || [ "${rules[hRule6]}" != 0 ]; then
+			if [ "${rules[hRule1]}" != 0 ] || [ "${rules[hRule2]}" != 0 ] ||
+			[ "${rules[hRule3]}" != 0 ] || [ "${rules[hRule4]}" != 0 ] ||
+			[ "${rules[hRule5]}" != 0 ] || [ "${rules[hRule6]}" != 0 ]; then
 				rules[hLayout]="$CONTROLLED_SMUSHING"
 			else
 				rules[hLayout]="$SMUSHING"
 			fi
 		fi
 	elif [ "${rules[hLayout]}" == "$SMUSHING" ]; then
-		if [ "${rules[hRule1]}" != 0 ] || [ "${rules[hRule2]}" != 0 ] || [ "${rules[hRule3]}" != 0 ] || [ "${rules[hRule4]}" != 0 ] || [ "${rules[hRule5]}" != 0 ] || [ "${rules[hRule6]}" != 0 ]; then
+		if [ "${rules[hRule1]}" != 0 ] || [ "${rules[hRule2]}" != 0 ] ||
+		[ "${rules[hRule3]}" != 0 ] || [ "${rules[hRule4]}" != 0 ] ||
+		[ "${rules[hRule5]}" != 0 ] || [ "${rules[hRule6]}" != 0 ]; then
 			rules[hLayout]="$CONTROLLED_SMUSHING"
 		fi
 	fi
 
 	if [ -z "${rules[vLayout]}" ]; then
-		if [ "${rules[vRule1]}" != 0 ] || [ "${rules[vRule2]}" != 0 ] || [ "${rules[vRule3]}" != 0 ] || [ "${rules[vRule4]}" != 0 ] || [ "${rules[vRule5]}" != 0 ]; then
+		if [ "${rules[vRule1]}" != 0 ] || [ "${rules[vRule2]}" != 0 ] ||
+		[ "${rules[vRule3]}" != 0 ] || [ "${rules[vRule4]}" != 0 ] ||
+		[ "${rules[vRule5]}" != 0 ]; then
 			rules[vLayout]="$CONTROLLED_SMUSHING"
 		else
 			rules[vLayout]="$FULL_WIDTH"
 		fi
 	elif [ "${rules[vLayout]}" == "$SMUSHING" ]; then
-		if [ "${rules[vRule1]}" != 0 ] || [ "${rules[vRule2]}" != 0 ] || [ "${rules[vRule3]}" != 0 ] || [ "${rules[vRule4]}" != 0 ] || [ "${rules[vRule5]}" != 0 ]; then
+		if [ "${rules[vRule1]}" != 0 ] || [ "${rules[vRule2]}" != 0 ] ||
+		[ "${rules[vRule3]}" != 0 ] || [ "${rules[vRule4]}" != 0 ] ||
+		[ "${rules[vRule5]}" != 0 ]; then
 			rules[vLayout]="$CONTROLLED_SMUSHING"
 		fi
 	fi
